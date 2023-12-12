@@ -1,1 +1,1 @@
-az policy definition create --name "EnforceTagsPolicy" --rules tag-policy.json
+az policy definition create --name "EnforceTagsPolicy" --rules tag-policy.json --display-name "Enforce Tags on Resources" --description "This policy ensures that all indexed resources in the subscription have required tags" --mode "Indexed"

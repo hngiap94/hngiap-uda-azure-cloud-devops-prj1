@@ -1,20 +1,9 @@
 {
-    "properties": {
-        "mode": "Indexed",
-        "displayName": "Enforce Tags on Resources",
-        "description": "This policy ensures that all indexed resources in the subscription have required tags.",
-        "metadata": {
-            "category": "Tags"
-        },
-        "parameters": {},
-        "policyRule": {
-            "if": {
-                "field": "tags",
-                "exists": "false"
-            },
-            "then": {
-                "effect": "deny"
-            }
-        }
+    "if": {
+        "field": "tags",
+        "exists": "false"
+    },
+    "then": {
+        "effect": "deny"
     }
 }
