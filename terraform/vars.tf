@@ -18,6 +18,22 @@ variable "location" {
 
 variable "vm_count" {
   type        = number
-  description = "Number of VM resources to create behind the load balancer"
+  description = "Number of virtual machine"
   default     = 2
+}
+
+variable "vm_size" {
+  type        = string
+  description = "Size of virtual machine"
+  default     = "Standard_B1s"
+}
+
+variable "vm_username" {
+  type        = string
+  description = "Username of virtual machine"
+}
+
+variable "vm_password" {
+  type        = string
+  description = "Password of virtual machine"
 }

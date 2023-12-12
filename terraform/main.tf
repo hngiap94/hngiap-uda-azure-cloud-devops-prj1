@@ -2,11 +2,6 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_image" "app" {
-  name                = "udacity-packer-image"
-  resource_group_name = var.resource_group
-}
-
 # Virtual network and subnet
 resource "azurerm_virtual_network" "main" {
   name                = "${var.project}-network"
@@ -118,8 +113,8 @@ resource "azurerm_lb" "main" {
 }
 
 resource "azurerm_lb_backend_address_pool" "main" {
-  name                = "${var.project}-lb-backend-pool"
-  loadbalancer_id     = azurerm_lb.main.id
+  name            = "${var.project}-lb-backend-pool"
+  loadbalancer_id = azurerm_lb.main.id
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
@@ -127,4 +122,49 @@ resource "azurerm_network_interface_backend_address_pool_association" "main" {
   ip_configuration_name   = "internal"
   network_interface_id    = azurerm_network_interface.main[count.index].id
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
+}
+
+# Virtual machine
+resource "azurerm_availability_set" "main" {
+  name                         = "${var.project}-availability-set"
+  location                     = var.location
+  resource_group_name          = var.resource_group
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 2
+
+  tags = {
+    project = var.project
+  }
+}
+
+data "azurerm_image" "app" {
+  name                = "udacity-packer-image"
+  resource_group_name = var.resource_group
+}
+
+resource "azurerm_linux_virtual_machine" "main" {
+  count                           = var.vm_count
+  name                            = "${var.project}-vm-${count.index}"
+  location                        = var.location
+  resource_group_name             = var.resource_group
+  size                            = var.vm_size
+  admin_username                  = var.vm_username
+  admin_password                  = var.vm_password
+  disable_password_authentication = false
+  availability_set_id             = azurerm_availability_set.main.id
+
+  network_interface_ids = [
+    azurerm_network_interface.main[count.index].id
+  ]
+
+  source_image_id = data.azurerm_image.app.id
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  tags = {
+    project = var.project
+  }
 }
