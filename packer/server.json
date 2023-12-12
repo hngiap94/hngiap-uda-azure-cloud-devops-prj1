@@ -4,8 +4,8 @@
     "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
     "tenant_id": "{{env `ARM_TENANT_ID`}}",
     "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
-    "resource_group_name": "your_resource_group_name",
-    "location": "your_location"
+    "resource_group_name": "{{env `ARM_RESOURCE_GROUP`}}",
+    "location": "{{env `ARM_LOCATION`}}"
   },
   "builders": [
     {
@@ -21,7 +21,10 @@
       "image_offer": "UbuntuServer",
       "image_sku": "18.04-LTS",
       "location": "{{ user `location` }}",
-      "vm_size": "Standard_B1s"
+      "vm_size": "Standard_B1s",
+      "azure_tags": {
+        "project": "giaphn-udacity-azure-cloud-devops-prj1"
+      }
     }
   ],
   "provisioners": [
