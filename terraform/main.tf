@@ -14,14 +14,16 @@ resource "azurerm_virtual_network" "main" {
   location            = var.location
   resource_group_name = var.resource_group
 
-  subnet {
-    name           = "${var.project}-subnet"
-    address_prefix = "10.0.1.0/24"
-  }
-
   tags = {
-    project     = var.project
+    project = var.project
   }
+}
+
+resource "azurerm_subnet" "main" {
+  name                 = "${var.project}-subnet"
+  resource_group_name  = var.resource_group
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 # Network security group
@@ -68,4 +70,33 @@ resource "azurerm_network_security_group" "main" {
   tags = {
     project = var.project
   }
+}
+
+# Network Interface
+resource "azurerm_network_interface" "main" {
+  count               = var.vm_count
+  name                = "${var.project}-nic-${count.index}"
+  location            = var.location
+  resource_group_name = var.resource_group
+
+  ip_configuration {
+    name                          = "${var.project}-ipconfig"
+    subnet_id                     = azurerm_subnet.main.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    project = var.project
+  }
+}
+
+# Public IP
+resource "azurerm_public_ip" "main" {
+    name                = "${var.project}-public-ip"
+    location            = var.location
+    resource_group_name = var.resource_group
+    allocation_method   = "Static"
+    tags = {
+        project = var.project
+    }
 }
