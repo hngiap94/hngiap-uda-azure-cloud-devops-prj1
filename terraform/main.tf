@@ -92,11 +92,39 @@ resource "azurerm_network_interface" "main" {
 
 # Public IP
 resource "azurerm_public_ip" "main" {
-    name                = "${var.project}-public-ip"
-    location            = var.location
-    resource_group_name = var.resource_group
-    allocation_method   = "Static"
-    tags = {
-        project = var.project
-    }
+  name                = "${var.project}-public-ip"
+  location            = var.location
+  resource_group_name = var.resource_group
+  allocation_method   = "Static"
+  tags = {
+    project = var.project
+  }
+}
+
+# Load Balancer
+resource "azurerm_lb" "main" {
+  name                = "${var.project}-lb"
+  location            = var.location
+  resource_group_name = var.resource_group
+
+  frontend_ip_configuration {
+    name                 = "${var.project}-frontendip"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
+
+  tags = {
+    project = var.project
+  }
+}
+
+resource "azurerm_lb_backend_address_pool" "main" {
+  name                = "${var.project}-lb-backend-pool"
+  loadbalancer_id     = azurerm_lb.main.id
+}
+
+resource "azurerm_network_interface_backend_address_pool_association" "main" {
+  count                   = var.vm_count
+  ip_configuration_name   = "internal"
+  network_interface_id    = azurerm_network_interface.main[count.index].id
+  backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
