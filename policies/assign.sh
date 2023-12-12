@@ -1,0 +1,1 @@
+az policy assignment create --name "EnforceTagsAssignment" --policy "EnforceTagsPolicy"

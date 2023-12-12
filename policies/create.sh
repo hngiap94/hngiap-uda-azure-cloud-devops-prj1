@@ -1,0 +1,1 @@
+az policy definition create --name "EnforceTagsPolicy" --rules tag-policy.json
