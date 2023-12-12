@@ -119,7 +119,7 @@ resource "azurerm_lb_backend_address_pool" "main" {
 
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
   count                   = var.vm_count
-  ip_configuration_name   = "${var.project}-frontendip"
+  ip_configuration_name   = "${var.project}-ipconfig"
   network_interface_id    = azurerm_network_interface.main[count.index].id
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
