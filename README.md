@@ -1,4 +1,4 @@
-# Udacity Azure Cloud DevOps Project 1
+# Deploying a Web Server in Azure
 ## Table of contents
 - [Overview](#overview)
 - [Dependencies](#dependencies)
@@ -10,8 +10,8 @@
 - [Clean Up Application](#clean-up-application)
 
 ## Overview
-TODO
 
+In this project, you will deploy a web server on Azure using Packer to build VM images and Terraform to deploy application's infrastructures
 ## Dependencies
 - An Azure account
 - An installation of the latest version of [Terraform](#https://developer.hashicorp.com/terraform/install)
