@@ -7,6 +7,7 @@
     - [Deploy a Policy](#deploy-a-policy)
     - [Build Packer Image](#build-packer-image)
     - [Deploy Infrastructure Using Terraform](#deploy-infrastructure-using-terraform)
+    - [Customize Infrastructure](#customize-infrastructure)
 - [Clean Up Application](#clean-up-application)
 
 ## Overview
@@ -90,6 +91,10 @@ terraform plan -out solution.plan
 terraform apply solution.plan
 ```
 ![Apply Terraform](screenshots/terraform/apply.png)
+
+### Customize Infrastructure
+- Edit either ```.env``` or ```terraform/vars.tf``` with values as you want
+- ```Plan``` and ```Apply``` terraform configurations again as shown above
 
 ## Clean Up Application
 - Destroy terraform
